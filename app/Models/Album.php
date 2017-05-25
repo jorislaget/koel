@@ -56,14 +56,21 @@ class Album extends Model
      */
     public static function get(Artist $artist, $name, $isCompilation = false)
     {
-        // If this is a compilation album, its artist must be "Various Artists"
-        if ($isCompilation) {
-            $artist = Artist::getVarious();
+        $name = $name ?: self::UNKNOWN_NAME;
+        $various = Artist::getVarious();
+
+        if ($album = self::where('name', $name)->first()) {
+            if ($album->artist_id !== $various->id) {
+                $album->artist_id = $various->id;
+                $album->save();
+            }
+
+            return $album;
         }
 
         return self::firstOrCreate([
-            'artist_id' => $artist->id,
-            'name' => $name ?: self::UNKNOWN_NAME,
+            'artist_id' => $isCompilation ? $various->id : $artist->id,
+            'name' => $name,
         ]);
     }
 
