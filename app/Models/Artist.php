@@ -87,7 +87,12 @@ class Artist extends Model
 
         $name = trim($name) ?: self::UNKNOWN_NAME;
 
-        return self::firstOrCreate(compact('name'), compact('name'));
+        if (!$artist = self::where('name', $name)->first()) {
+            $artist = self::create(compact('name'));
+            $artist->getInfo();
+        }
+
+        return $artist;
     }
 
     /**

@@ -60,18 +60,20 @@ class Album extends Model
         $various = Artist::getVarious();
 
         if ($album = self::where('name', $name)->first()) {
-            if ($album->artist_id !== $various->id) {
+            if ($album->artist_id !== $artist->id && $album->artist_id !== $various->id) {
                 $album->artist_id = $various->id;
                 $album->save();
             }
+        } else {
+            $album = self::create([
+                'artist_id' => $isCompilation ? $various->id : $artist->id,
+                'name' => $name,
+            ]);
 
-            return $album;
+            $album->getInfo();
         }
 
-        return self::firstOrCreate([
-            'artist_id' => $isCompilation ? $various->id : $artist->id,
-            'name' => $name,
-        ]);
+        return $album;
     }
 
     /**
