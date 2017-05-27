@@ -67,7 +67,7 @@ class PlaylistController extends Controller
      */
     public function sync(Request $request, Playlist $playlist)
     {
-        $this->authorize('owner', $playlist);
+        $this->authorize('contributor', $playlist);
 
         $playlist->songs()->sync((array) $request->songs);
 

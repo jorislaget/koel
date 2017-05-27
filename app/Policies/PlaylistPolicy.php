@@ -11,4 +11,9 @@ class PlaylistPolicy
     {
         return $user->id === $playlist->user_id;
     }
+
+    public function contributor(User $user, Playlist $playlist)
+    {
+        return $user->id === $playlist->user_id || is_null($playlist->user_id);
+    }
 }
