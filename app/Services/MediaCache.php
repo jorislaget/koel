@@ -36,7 +36,7 @@ class MediaCache
         return [
             'albums' => Album::orderBy('name')->get(),
             'artists' => Artist::orderBy('name')->get(),
-            'songs' => Song::all(),
+            'songs' => Song::groupBy('album_id', 'artist_id', 'title')->get(),
         ];
     }
 
