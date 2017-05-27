@@ -41,6 +41,11 @@ class Song extends Model
     /**
      * @var array
      */
+    protected $appends = ['folder'];
+
+    /**
+     * @var array
+     */
     protected $casts = [
         'length' => 'float',
         'mtime' => 'int',
@@ -360,5 +365,17 @@ class Song extends Model
         list($bucket, $key) = explode('/', $matches[1], 2);
 
         return compact('bucket', 'key');
+    }
+
+    /**
+     * Get the root folder where the song is stored on disk
+     *
+     * @return string
+     */
+    public function getFolderAttribute()
+    {
+        $path = str_replace(Setting::get('media_path'), '', $this->path);
+        $path = trim($path, DIRECTORY_SEPARATOR);
+        return explode(DIRECTORY_SEPARATOR, $path)[0];
     }
 }

@@ -17,6 +17,7 @@
     <td class="title">{{ song.title }}</td>
     <td class="artist">{{ song.artist.name }}</td>
     <td class="album">{{ song.album.name }}</td>
+    <td class="folder">{{ song.folder }}</td>
     <td class="time">{{ song.fmtLength }}</td>
     <td class="play" @click.stop="doPlayback">
       <i class="fa fa-pause-circle" v-if="song.playbackState === 'playing'"/>

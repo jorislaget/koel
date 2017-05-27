@@ -12,7 +12,6 @@
 
 <script>
 import isMobile from 'ismobilejs'
-import { debounce } from 'lodash'
 
 import { event } from '../../utils'
 
@@ -22,7 +21,8 @@ export default {
   data () {
     return {
       q: '',
-      showing: !isMobile.phone
+      showing: !isMobile.phone,
+      timer: null
     }
   },
 
@@ -30,9 +30,12 @@ export default {
     /**
      * Limit the filter's execution rate using lodash's debounce.
      */
-    filter: debounce(function () {
-      event.emit('filter:changed', this.q)
-    }, 200)
+    filter () {
+      window.clearTimeout(this.timer)
+      this.timer = window.setTimeout(() => {
+        event.emit('filter:changed', this.q)
+      }, 300)
+    }
   },
 
   created () {

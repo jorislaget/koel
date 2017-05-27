@@ -1,4 +1,5 @@
 import { each, isObject, isNumber, get } from 'lodash'
+import { event } from './'
 
 export function orderBy (arr, sortKey, reverse) {
   if (!sortKey) {
@@ -58,6 +59,8 @@ export function filterBy (arr, search, ...keys) {
     return arr
   }
 
+  event.emit('loading:changed', true)
+
   // cast to lowercase string
   search = (`${search}`).toLowerCase()
 
@@ -71,6 +74,8 @@ export function filterBy (arr, search, ...keys) {
       }
     })
   })
+
+  event.emit('loading:changed', false)
 
   return res
 }

@@ -25,6 +25,10 @@
             <i class="fa fa-angle-down" v-show="sortingByAlbum && order > 0"/>
             <i class="fa fa-angle-up" v-show="sortingByAlbum && order < 0"/>
           </th>
+          <th @click="sort('song.folder')" class="folder">Folder
+            <i class="fa fa-angle-down" v-show="sortKey === 'song.folder' && order > 0"/>
+            <i class="fa fa-angle-up" v-show="sortKey === 'song.folder' && order < 0"/>
+          </th>
           <th @click="sort('song.length')" class="time">Time
             <i class="fa fa-angle-down" v-show="sortKey === 'song.length' && order > 0"/>
             <i class="fa fa-angle-up" v-show="sortKey === 'song.length' && order < 0"/>
@@ -44,6 +48,8 @@
     />
 
     <song-menu ref="contextMenu" :songs="selectedSongs"/>
+
+    <div class="loading-table" v-if="loading"><sound-bar/></div>
   </div>
 </template>
 
@@ -57,11 +63,12 @@ import { playback } from '../../services'
 import router from '../../router'
 import songItem from './song-item.vue'
 import songMenu from './song-menu.vue'
+import soundBar from './sound-bar.vue'
 
 export default {
   name: 'song-list',
   props: ['items', 'type', 'playlist', 'sortable'],
-  components: { songItem, songMenu },
+  components: { songItem, songMenu, soundBar },
 
   data () {
     return {
@@ -74,7 +81,8 @@ export default {
       order: 1,
       sortingByAlbum: false,
       sortingByArtist: false,
-      songRows: []
+      songRows: [],
+      loading: false
     }
   },
 
@@ -103,8 +111,8 @@ export default {
 
   computed: {
     filteredItems () {
-      // Allow searching specifically in title, album, and artist
-      const re = /in:(title|album|artist)/ig
+      // Allow searching specifically in title, album, artist and folder
+      const re = /in:(title|album|artist|folder)/ig
       const fields = []
       const matches = this.q.match(re)
       if (matches) {
@@ -114,7 +122,7 @@ export default {
         }
         matches.forEach(match => {
           let field = match.split(':')[1].toLowerCase()
-          if (field !== 'title') {
+          if (field !== 'title' && field !== 'folder') {
             field = `${field}.name`
           }
           fields.push(`song.${field}`)
@@ -124,7 +132,7 @@ export default {
       return filterBy(
         this.songRows,
         this.q,
-        ...(fields.length ? fields : ['song.title', 'song.album.name', 'song.artist.name'])
+        ...(fields.length ? fields : ['song.title', 'song.album.name', 'song.artist.name', 'song.folder'])
       )
     },
 
@@ -448,6 +456,10 @@ export default {
        */
       'filter:changed': q => {
         this.q = q
+      },
+
+      'loading:changed': value => {
+          this.loading = value
       }
     })
   }
@@ -457,6 +469,23 @@ export default {
 <style lang="scss">
 @import "../../../sass/partials/_vars.scss";
 @import "../../../sass/partials/_mixins.scss";
+
+.loading-table {
+  position: absolute;
+  top: 35px;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  background: rgba(22, 22, 22, 0.75);
+
+  .bars {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
 
 .song-list-wrap {
   position: relative;
