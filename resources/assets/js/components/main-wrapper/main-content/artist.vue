@@ -36,7 +36,7 @@
       />
     </h1>
 
-    <song-list :items="artist.songs" type="artist" ref="songList"/>
+    <song-list :items="artist.songs" type="artist" ref="songList" v-if="$parent.view === 'artist'">
 
     <section class="info-wrapper" v-if="sharedState.useLastfm && info.showing">
       <a href class="close" @click.prevent="info.showing = false"><i class="fa fa-times"></i></a>

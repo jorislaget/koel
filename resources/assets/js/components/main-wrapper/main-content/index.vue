@@ -4,9 +4,9 @@
     <home v-show="view === 'home'"/>
     <queue v-show="view === 'queue'"/>
     <songs v-show="view === 'songs'"/>
-    <albums v-show="view === 'albums'"/>
+    <albums v-if="view === 'albums'"/>
     <album v-show="view === 'album'"/>
-    <artists v-show="view === 'artists'"/>
+    <artists v-if="view === 'artists'"/>
     <artist v-show="view === 'artist'"/>
     <users v-show="view === 'users'"/>
     <settings v-show="view === 'settings'"/>

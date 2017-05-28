@@ -39,8 +39,16 @@ export default {
   },
 
   created () {
-    event.on('search:toggle', () => {
-      this.showing = !this.showing
+    event.on({
+        'main-content-view:load': view => {
+            setTimeout(() => {
+              event.emit('filter:changed', this.q)
+            }, 1)
+        },
+
+        'search:toggle': () => {
+            this.showing = !this.showing
+        }
     })
   }
 }

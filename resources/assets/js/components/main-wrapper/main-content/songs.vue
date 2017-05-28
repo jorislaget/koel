@@ -20,7 +20,7 @@
       />
     </h1>
 
-    <song-list :items="state.songs" type="allSongs"/>
+    <song-list :items="state.songs" type="allSongs" v-if="$parent.view === 'songs'">
   </section>
 </template>
 

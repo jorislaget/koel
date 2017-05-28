@@ -450,6 +450,18 @@ export default {
   },
 
   created () {
+    if (this.sortable === false) {
+        this.sortKey = ''
+    }
+
+    // Update the song count and duration status on parent.
+    this.$parent.updateMeta({
+        songCount: this.items.length,
+        totalLength: songStore.getLength(this.items, true)
+    })
+
+    this.generateSongRows()
+
     event.on({
       /**
        * Listen to 'filter:changed' event to filter the current list.

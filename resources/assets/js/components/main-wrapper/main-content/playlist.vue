@@ -32,7 +32,7 @@
       :playlist="playlist"
       type="playlist"
       ref="songList"
-    />
+      v-if="$parent.view === 'playlist'">
 
     <div v-show="!playlist.songs.length" class="none">
       The playlist is currently empty. You can fill it up by dragging songs into its name in the sidebar,

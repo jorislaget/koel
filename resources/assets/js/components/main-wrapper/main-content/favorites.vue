@@ -26,7 +26,7 @@
       />
     </h1>
 
-    <song-list v-show="state.songs.length" :items="state.songs" type="favorites"/>
+    <song-list v-show="state.songs.length" :items="state.songs" type="favorites" v-if="$parent.view === 'favorites'">
 
     <div v-show="!state.songs.length" class="none">
       Start loving!

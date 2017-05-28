@@ -56,7 +56,8 @@ export function limitBy (arr, n, offset = 0) {
 
 export function filterBy (arr, search, ...keys) {
   if (!search) {
-    return arr
+      event.emit('loading:changed', false)
+      return arr
   }
 
   event.emit('loading:changed', true)
