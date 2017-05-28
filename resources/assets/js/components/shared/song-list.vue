@@ -118,6 +118,7 @@ export default {
       if (matches) {
         this.q = this.q.replace(re, '').trim()
         if (!this.q) {
+          event.emit('loading:changed', false)
           return this.songRows
         }
         matches.forEach(match => {
@@ -467,7 +468,13 @@ export default {
        * Listen to 'filter:changed' event to filter the current list.
        */
       'filter:changed': q => {
-        this.q = q
+        if (q !== '') {
+          event.emit('loading:changed', true)
+        }
+
+        setTimeout(() => {
+            this.q = q
+        }, 1)
       },
 
       'loading:changed': value => {

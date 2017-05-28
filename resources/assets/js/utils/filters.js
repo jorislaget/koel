@@ -60,13 +60,12 @@ export function filterBy (arr, search, ...keys) {
       return arr
   }
 
-  event.emit('loading:changed', true)
-
   // cast to lowercase string
   search = (`${search}`).toLowerCase()
 
   const res = []
 
+  let i = 0
   each(arr, item => {
     each(keys, key => {
       if (`${get(item, key)}`.toLowerCase().indexOf(search) !== -1) {
@@ -74,9 +73,13 @@ export function filterBy (arr, search, ...keys) {
         return false
       }
     })
-  })
 
-  event.emit('loading:changed', false)
+    i++
+
+    if (arr.length === i) {
+      event.emit('loading:changed', false)
+    }
+  })
 
   return res
 }
