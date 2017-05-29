@@ -31,7 +31,7 @@ class DataController extends Controller
             $playlist['songs'] = array_pluck($playlist['songs'], 'id');
         }
 
-        return response()->json(MediaCache::get() + [
+        return response()->json([
             'settings' => $request->user()->is_admin ? Setting::pluck('value', 'key')->all() : [],
             'playlists' => $playlists,
             'interactions' => Interaction::byCurrentUser()->get(),
@@ -45,6 +45,7 @@ class DataController extends Controller
             'cdnUrl' => app()->staticUrl(),
             'currentVersion' => Application::KOEL_VERSION,
             'latestVersion' => $request->user()->is_admin ? app()->getLatestVersion() : Application::KOEL_VERSION,
+            'data_url' => MediaCache::get()
         ]);
     }
 }

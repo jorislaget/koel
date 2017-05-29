@@ -43,18 +43,24 @@ export const sharedStore = {
 
         userStore.init(this.state.users, this.state.currentUser)
         preferenceStore.init(this.state.preferences)
-        artistStore.init(this.state.artists)
-        albumStore.init(this.state.albums)
-        songStore.init(this.state.songs)
-        songStore.initInteractions(this.state.interactions)
-        playlistStore.init(this.state.playlists)
-        queueStore.init()
         settingStore.init(this.state.settings)
 
         // Keep a copy of the media path. We'll need this to properly warn the user later.
         this.state.originalMediaPath = this.state.settings.media_path
 
-        resolve(this.state)
+        http.get(data.data_url, ({ data }) => {
+          assign(this.state, data)
+
+          artistStore.init(this.state.artists)
+          albumStore.init(this.state.albums)
+          songStore.init(this.state.songs)
+          songStore.initInteractions(this.state.interactions)
+          playlistStore.init(this.state.playlists)
+          queueStore.init()
+
+          resolve(this.state)
+        }, error => reject(error))
+
       }, error => reject(error))
     })
   }

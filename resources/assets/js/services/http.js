@@ -12,7 +12,12 @@ export const http = {
     axios.request({
       url,
       data,
-      method: method.toLowerCase()
+      method: method.toLowerCase(),
+      onDownloadProgress: ({ loaded, total }) => {
+        if (total > 0) {
+          NProgress.set(total / loaded)
+        }
+      }
     }).then(successCb).catch(errorCb)
   },
 
@@ -40,6 +45,7 @@ export const http = {
 
     // Intercept the request to make sure the token is injected into the header.
     axios.interceptors.request.use(config => {
+      NProgress.start()
       config.headers.Authorization = `Bearer ${ls.get('jwt-token')}`
       return config
     })
